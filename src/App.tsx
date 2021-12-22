@@ -1,24 +1,14 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Layout } from "features/Layout/Layout";
+import { Routes, Route } from "react-router-dom";
+import { Layout } from "features/Layout";
+import { HomepageContainer } from "features/Homepage";
 
 function App() {
   return (
     <Layout>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
-      <h1 className="text-3xl my-5 font-bold underline"> Hello world! </h1>
+      <Routes>
+        <Route path="/" element={<HomepageContainer />} />
+      </Routes>
     </Layout>
   );
 }
