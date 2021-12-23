@@ -1,6 +1,4 @@
-import { Asset, ContentfulCollection, Entry, Field } from "contentful";
-
-import { MainImageType } from "interfaces";
+import { Asset } from "contentful";
 
 export type BannerImage = {
   endDate: string;
@@ -10,6 +8,9 @@ export type BannerImage = {
   mobileImage: Asset;
 };
 
-export const homeBanner: ContentfulCollection<Entry<string>> = {
-  items: [],
-};
+export type MainCategories = {
+  key_path: string;
+  count: number;
+  name: string;
+  key: string;
+}[];
