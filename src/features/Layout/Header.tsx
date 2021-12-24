@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { HeaderNav } from ".";
 
 export const Header = () => {
@@ -5,11 +6,13 @@ export const Header = () => {
     <header className="h-16 w-full bg-white sticky top-0 border-b border-gray-100 shadow-md z-10">
       <nav className=":w-full md:w-11/12 m-auto h-full p-5 flex items-center">
         <div className="w-2/12 py-4 pl-0 pr-8">
-          <img
-            className="h-full max-h-10"
-            src="https://daruma.co.id/static/madan/logo%20header.png"
-            alt="logo"
-          />
+          <Link to="/">
+            <img
+              className="h-full max-h-10"
+              src="https://daruma.co.id/static/madan/logo%20header.png"
+              alt="logo"
+            />
+          </Link>
         </div>
         <div className="w-2/12 py-4 pl-0 pr-8">
           <HeaderNav />

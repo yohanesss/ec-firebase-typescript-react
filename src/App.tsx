@@ -9,10 +9,7 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<HomepageContainer />} />
-        <Route
-          path="categories/:category-key"
-          element={<CategoriesContainer />}
-        />
+        <Route path="categories/:key" element={<CategoriesContainer />} />
       </Routes>
     </Layout>
   );

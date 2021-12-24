@@ -2,6 +2,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getCategories } from "api/ecommerce";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { MainCategories } from "types";
 
 export const HeaderNav = () => {
@@ -20,12 +21,15 @@ export const HeaderNav = () => {
         category.name.trim().length > 0 &&
         category.name.toLowerCase() !== "default" &&
         category.name.toLowerCase() !== "power-tools" && (
-          <li
+          <Link
             key={category.key}
-            className="p-2 hover:bg-gray-400 cursor-pointer"
+            to={`categories/${category.key}`}
+            onClick={() => toggleShowMenu(false)}
           >
-            {category.name}
-          </li>
+            <li className="p-2 hover:bg-gray-400 cursor-pointer">
+              {category.name}
+            </li>
+          </Link>
         )
     );
 
