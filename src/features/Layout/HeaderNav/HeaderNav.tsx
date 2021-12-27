@@ -23,7 +23,7 @@ export const HeaderNav = () => {
         category.name.toLowerCase() !== "power-tools" && (
           <Link
             key={category.key}
-            to={`categories/${category.key}`}
+            to={`/categories/${category.key}`}
             onClick={() => toggleShowMenu(false)}
           >
             <li className="p-2 hover:bg-gray-400 cursor-pointer">

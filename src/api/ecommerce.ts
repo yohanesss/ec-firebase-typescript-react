@@ -1,4 +1,4 @@
-import { ProductsCategory } from "./../types";
+import { ProductsCategory, ProductType } from "./../types";
 import { MainCategories } from "../types";
 import axios from "axios";
 
@@ -19,4 +19,11 @@ export const getProductsCategory = async (
   );
 
   return res.data as ProductsCategory;
+};
+
+export const getProduct = async (uid: string) => {
+  const res = await axios.get(
+    `https://yoh-ecommerce.herokuapp.com/products?uid=${uid}`
+  );
+  return res.data[0] as ProductType;
 };

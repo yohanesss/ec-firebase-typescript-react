@@ -26,7 +26,6 @@ export const CategoriesContainer = () => {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [input, setInput] = useState("");
   const [searchParams] = useSearchParams();
   const { key } = useParams();
   const page = searchParams.get("page");
@@ -52,7 +51,9 @@ export const CategoriesContainer = () => {
   const renderProducts = () => {
     const productsList =
       products?.length &&
-      products.map((product) => <ProductCategory product={product} />);
+      products.map((product) => (
+        <ProductCategory key={product.key} product={product} />
+      ));
     return (
       <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols5">
         {productsList}
@@ -71,12 +72,6 @@ export const CategoriesContainer = () => {
         </div>
       ) : (
         <>
-          {/* <input
-            className="my-5 border"
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          /> */}
           {activeCategoryName && (
             <h1 className="font-extrabold text-2xl pt-2 pb-4">
               {activeCategoryName}

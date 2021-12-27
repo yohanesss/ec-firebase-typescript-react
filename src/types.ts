@@ -15,7 +15,7 @@ export type MainCategories = {
   key: string;
 }[];
 
-export type ProductCategoryType = {
+export type ProductType = {
   uid: number;
   name: string;
   key: string;
@@ -39,4 +39,4 @@ export type ProductCategoryType = {
   indent_availability: string;
   price_list: [];
 };
-export type ProductsCategory = ProductCategoryType[];
+export type ProductsCategory = ProductType[];
