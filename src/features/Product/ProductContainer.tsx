@@ -91,7 +91,7 @@ export const ProductContainer = () => {
       );
     }
 
-    return <p>No Product Available</p>;
+    return !isLoading ? <p>No Product Available</p> : null;
   };
 
   return (

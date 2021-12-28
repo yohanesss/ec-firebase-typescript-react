@@ -24,8 +24,9 @@ export const Header = () => {
           />
         </div>
         <div className="w-2/12 flex justify-evenly items-center">
-          <button className="hover:underline">Register</button>
-          <button className="hover:underline">Login</button>
+          <Link to="/login">
+            <button className="hover:underline">Register / Login</button>
+          </Link>
         </div>
       </nav>
     </header>
