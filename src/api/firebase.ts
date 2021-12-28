@@ -13,3 +13,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
+
+export const createAccount = async (email: string, password: string) =>
+  await auth.createUserWithEmailAndPassword(email, password);
+
+export const signInWithEmail = async (email: string, password: string) =>
+  await auth.signInWithEmailAndPassword(email, password);
+
+export const signOut = async () => {
+  await auth.signOut();
+};

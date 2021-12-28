@@ -40,3 +40,7 @@ export type ProductType = {
   price_list: [];
 };
 export type ProductsCategory = ProductType[];
+
+export type FirebaseErrorCodeType = {
+  [error: string]: string;
+};

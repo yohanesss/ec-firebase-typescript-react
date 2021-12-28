@@ -6,9 +6,9 @@ export const AuthContext = createContext<firebase.User | null>(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error(`useAuth must be rendered inside the AuthProvider`);
-  }
+  // if (!context) {
+  //   throw new Error(`useAuth must be rendered inside the AuthProvider`);
+  // }
 
   return context;
 };
