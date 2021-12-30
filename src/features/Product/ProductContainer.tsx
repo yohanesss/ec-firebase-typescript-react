@@ -1,16 +1,21 @@
 import { getProduct } from "api/ecommerce";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ProductType } from "types";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toLocalCurrency } from "utils/util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "hooks/useAuth";
+import { db } from "api/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const ProductContainer = () => {
   const [product, setProduct] = useState<ProductType | null>(null);
   const [isLoading, setLoading] = useState(true);
   const { key } = useParams();
+  const user = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     key &&
@@ -19,6 +24,52 @@ export const ProductContainer = () => {
         setLoading(false);
       });
   }, [key]);
+
+  const addToCart = async () => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      const isExists = await (
+        await db.collection("carts").doc(user.uid).get()
+      ).exists;
+
+      if (!isExists) {
+        await setDoc(doc(db, "carts", user.uid), {
+          products: [
+            {
+              name: product?.name,
+              catalog_code: product?.catalog_code,
+              image_url: product?.images[0]?.original_url,
+              qty: 1,
+            },
+          ],
+        });
+      } else {
+        const userCart = await getDoc(
+          await db.collection("carts").doc(user.uid)
+        );
+
+        const products = userCart.data();
+        db.collection("carts")
+          .doc(user.uid)
+          .update({
+            products: products
+              ? [
+                  ...products.products,
+                  {
+                    name: product?.name,
+                    catalog_code: product?.catalog_code,
+                    image_url: product?.images[0]?.original_url,
+                    qty: 1,
+                  },
+                ]
+              : [],
+          });
+      }
+      console.log("[isExisgts]", isExists);
+      // console.log("user", user.uid);
+    }
+  };
 
   const renderSpinner = isLoading && (
     <div
@@ -73,7 +124,10 @@ export const ProductContainer = () => {
                   </span>
                 )}
               </p>
-              <button className="my-10 bg-red-500 text-white border rounded-sm px-4 py-2 hover:bg-red-800">
+              <button
+                onClick={addToCart}
+                className="my-10 bg-red-500 text-white border rounded-sm px-4 py-2 hover:bg-red-800"
+              >
                 Add to Cart
               </button>
               <h3 className="text-xl mb-2 font-bold text-red-900">
