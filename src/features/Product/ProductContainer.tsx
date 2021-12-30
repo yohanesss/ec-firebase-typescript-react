@@ -50,20 +50,27 @@ export const ProductContainer = () => {
         );
 
         const products = userCart.data();
+        const isProductInCart =
+          products?.products.filter(
+            (p: { catalog_code: string }) =>
+              p.catalog_code === product?.catalog_code
+          ).length > 0;
+
         db.collection("carts")
           .doc(user.uid)
           .update({
-            products: products
-              ? [
-                  ...products.products,
+            products: isProductInCart
+              ? products?.products
+              : [
+                  ...products?.products,
                   {
                     name: product?.name,
                     catalog_code: product?.catalog_code,
                     image_url: product?.images[0]?.original_url,
+                    price: product?.price,
                     qty: 1,
                   },
-                ]
-              : [],
+                ],
           });
       }
       console.log("[isExisgts]", isExists);
