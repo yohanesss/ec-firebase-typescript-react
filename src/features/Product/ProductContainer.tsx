@@ -40,6 +40,7 @@ export const ProductContainer = () => {
               name: product?.name,
               catalog_code: product?.catalog_code,
               image_url: product?.images[0]?.original_url,
+              price: product?.price,
               qty: 1,
             },
           ],
