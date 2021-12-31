@@ -3,13 +3,14 @@ import { useState } from "react";
 import { firebaseErrorCode } from "utils/firebaseErrorCode";
 import { FirebaseError } from "@firebase/util";
 import { useAuth } from "hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 export const AuthSignInRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [peekPassword, togglePeekPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const user = useAuth();
+  const { user } = useAuth();
 
   const handleSignUp = async () => {
     try {
@@ -85,6 +86,7 @@ export const AuthSignInRegister = () => {
       </div>
     </div>
   ) : (
-    <h2 className="mt-4 text-center">Welcome {user.email}</h2>
+    <Navigate replace to="/" />
+    // <h2 className="mt-4 text-center">Welcome {user.email}</h2>
   );
 };

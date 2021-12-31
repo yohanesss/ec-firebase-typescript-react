@@ -25,3 +25,15 @@ export const signInWithEmail = async (email: string, password: string) =>
 export const signOut = async () => {
   await auth.signOut();
 };
+
+export const getCartByDoc = async (uid: string) => {
+  return await db.collection("carts").doc(uid);
+};
+
+export const getUserCart = async (uid: string) => {
+  const cart = await db.collection("carts").doc(uid).get();
+  return {
+    data: await cart.data(),
+    isExists: await cart.exists,
+  };
+};

@@ -7,14 +7,16 @@ import { toLocalCurrency } from "utils/util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "hooks/useAuth";
-import { db } from "api/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db, getUserCart } from "api/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { GlobalNotification as ShowSuccessAddToCartNotification } from "utils/components/GlobalNotification";
 
 export const ProductContainer = () => {
   const [product, setProduct] = useState<ProductType | null>(null);
+  const [showNotification, toggleNotification] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const { key } = useParams();
-  const user = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,13 +27,15 @@ export const ProductContainer = () => {
       });
   }, [key]);
 
+  useEffect(() => {
+    if (showNotification) setTimeout(() => toggleNotification(false), 3000);
+  }, [showNotification]);
+
   const addToCart = async () => {
     if (!user) {
       navigate("/login");
     } else {
-      const isExists = await (
-        await db.collection("carts").doc(user.uid).get()
-      ).exists;
+      const { data: userCart, isExists } = await getUserCart(user.uid);
 
       if (!isExists) {
         await setDoc(doc(db, "carts", user.uid), {
@@ -46,11 +50,7 @@ export const ProductContainer = () => {
           ],
         });
       } else {
-        const userCart = await getDoc(
-          await db.collection("carts").doc(user.uid)
-        );
-
-        const products = userCart.data();
+        const products = userCart;
         const isProductInCart =
           products?.products.filter(
             (p: { catalog_code: string }) =>
@@ -74,9 +74,8 @@ export const ProductContainer = () => {
                 ],
           });
       }
-      console.log("[isExisgts]", isExists);
-      // console.log("user", user.uid);
     }
+    toggleNotification(true);
   };
 
   const renderSpinner = isLoading && (
@@ -158,6 +157,10 @@ export const ProductContainer = () => {
 
   return (
     <>
+      <ShowSuccessAddToCartNotification
+        isShow={showNotification}
+        label={"Product has been added to cart!"}
+      />
       {renderSpinner}
       {renderProduct()}
     </>

@@ -1,14 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
-import { auth } from "api/firebase";
+import { auth, db, getCartByDoc, getUserCart } from "api/firebase";
 
-export const AuthContext = createContext<firebase.User | null>(null);
+export const AuthContext = createContext<{
+  user: firebase.User | null;
+  cart: firebase.firestore.DocumentData | null;
+}>({ user: null, cart: null });
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  // if (!context) {
-  //   throw new Error(`useAuth must be rendered inside the AuthProvider`);
-  // }
+  if (!context) {
+    throw new Error(`useAuth must be rendered inside the AuthProvider`);
+  }
 
   return context;
 };
@@ -19,6 +22,9 @@ type AuthProviderType = {
 
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const [user, setUser] = useState<firebase.User | null>(null);
+  const [cart, setCart] = useState<firebase.firestore.DocumentData | null>(
+    null
+  );
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
@@ -28,5 +34,26 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
     return unsubscribe;
   }, []);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    if (user) {
+      db.collection("carts")
+        .doc(user.uid)
+        .onSnapshot(
+          (docSnapshot) => {
+            setCart({ data: docSnapshot.data() });
+          },
+          (err) => {
+            throw new Error(`Encountered error: ${err}`);
+          }
+        );
+    } else {
+      setCart(null);
+    }
+  }, [user]);
+
+  return (
+    <AuthContext.Provider value={{ user: user, cart: cart }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

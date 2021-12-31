@@ -5,12 +5,14 @@ import { HomepageContainer } from "features/Homepage";
 import { CategoriesContainer } from "features/Categories";
 import { ProductContainer } from "features/Product";
 import { AuthSignInRegister } from "features/Layout/AuthSignInRegister/AuthSignInRegister";
+import { Cart } from "features/Cart/Cart";
 
 function App() {
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<HomepageContainer />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<AuthSignInRegister />} />
         <Route path="/categories/:key" element={<CategoriesContainer />} />
         <Route path="/products/:key" element={<ProductContainer />} />
