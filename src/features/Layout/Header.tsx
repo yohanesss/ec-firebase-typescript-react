@@ -36,7 +36,7 @@ export const Header = () => {
                 alt="cart"
               />
               {cart && cart.data && (
-                <span className="absolute top-0 right-0 bg-red-700 text-white px-0 rounded-full text-sm -mr-2">
+                <span className="absolute top-0 right-0 bg-red-700 text-white px-1 rounded-full text-sm -mr-2">
                   {cart.data.products.length}
                 </span>
               )}

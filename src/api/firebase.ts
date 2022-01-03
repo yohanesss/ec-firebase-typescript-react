@@ -1,6 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -36,4 +37,20 @@ export const getUserCart = async (uid: string) => {
     data: await cart.data(),
     isExists: await cart.exists,
   };
+};
+
+export const createNewDocument = async (
+  collectionName: string,
+  uid: string,
+  payload: any
+) => {
+  await setDoc(doc(db, collectionName, uid), payload);
+};
+
+export const updateDocument = async (
+  collectionName: string,
+  uid: string,
+  payload: any
+) => {
+  await db.collection(collectionName).doc(uid).update(payload);
 };

@@ -44,3 +44,11 @@ export type ProductsCategory = ProductType[];
 export type FirebaseErrorCodeType = {
   [error: string]: string;
 };
+
+export type CartItemsType = {
+  catalog_code: string;
+  name: string;
+  price: number;
+  qty: number;
+  image_url: string;
+};

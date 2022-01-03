@@ -7,7 +7,12 @@ import { toLocalCurrency } from "utils/util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "hooks/useAuth";
-import { db, getUserCart } from "api/firebase";
+import {
+  createNewDocument,
+  db,
+  getUserCart,
+  updateDocument,
+} from "api/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { GlobalNotification as ShowSuccessAddToCartNotification } from "utils/components/GlobalNotification";
 
@@ -28,7 +33,10 @@ export const ProductContainer = () => {
   }, [key]);
 
   useEffect(() => {
-    if (showNotification) setTimeout(() => toggleNotification(false), 3000);
+    if (showNotification) {
+      const timeout = setTimeout(() => toggleNotification(false), 3000);
+      return clearTimeout(timeout);
+    }
   }, [showNotification]);
 
   const addToCart = async () => {
@@ -36,9 +44,8 @@ export const ProductContainer = () => {
       navigate("/login");
     } else {
       const { data: userCart, isExists } = await getUserCart(user.uid);
-
       if (!isExists) {
-        await setDoc(doc(db, "carts", user.uid), {
+        await createNewDocument("carts", user.uid, {
           products: [
             {
               name: product?.name,
@@ -57,22 +64,20 @@ export const ProductContainer = () => {
               p.catalog_code === product?.catalog_code
           ).length > 0;
 
-        db.collection("carts")
-          .doc(user.uid)
-          .update({
-            products: isProductInCart
-              ? products?.products
-              : [
-                  ...products?.products,
-                  {
-                    name: product?.name,
-                    catalog_code: product?.catalog_code,
-                    image_url: product?.images[0]?.original_url,
-                    price: product?.price,
-                    qty: 1,
-                  },
-                ],
-          });
+        updateDocument("carts", user.uid, {
+          products: isProductInCart
+            ? products?.products
+            : [
+                ...products?.products,
+                {
+                  name: product?.name,
+                  catalog_code: product?.catalog_code,
+                  image_url: product?.images[0]?.original_url,
+                  price: product?.price,
+                  qty: 1,
+                },
+              ],
+        });
       }
     }
     toggleNotification(true);
